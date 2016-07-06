@@ -100,7 +100,7 @@ namespace OrientWebGW.Client
                     data0.high = data["h"];
                     data0.low = data["l"];
                     data0.last = data["p"];
-                    data0.openInterest = data["oi"];
+                    data0.openInterest = data["oi"]==null?0:data["oi"];
                     data0.status = data["s"];
                     data0.time = data["t"];
                     data0.turnover = data["tt"];

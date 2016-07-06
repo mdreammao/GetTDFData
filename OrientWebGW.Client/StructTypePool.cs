@@ -28,7 +28,7 @@ namespace OrientWebGW.Client
     {
         public string code, status;
         public int[] ask, askv, bid, bidv;
-        public int high, low, last, openInterest, time, turnover, volume,count;
+        public long high, low, last, openInterest, time, turnover, volume,count;
     }
 
     /// <summary>
