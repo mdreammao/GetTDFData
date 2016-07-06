@@ -34,24 +34,24 @@ namespace OrientWebGW.Client
             List<optionDataFormat> myData = new List<optionDataFormat>();
             Dictionary<string, List<optionDataFormat>> optionData = new Dictionary<string, List<optionDataFormat>>();
             int total = 0;
-            int lastRecordTime = 0;
             int today = Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd"));
             OptionInformation myOption = new OptionInformation(today);
             int[] optionList = myOption.GetOptionNameByDate(today);
-
+            string time = "";
+            int recordStart = 0;
+            int recordEnd = 0;
             string optionString = "";
             for (int i = 0; i < optionList.Length; i++)
             {
-                if (i == optionList.Length - 1)
-                {
-                    optionString += optionList[i].ToString() + ".SH";
-                }
-                else
-                {
-                    optionString += optionList[i].ToString() + ".SH,";
-                }
+                optionString += optionList[i].ToString() + ".SH,";
             }
-
+            int thisMonth = Convert.ToInt32(DateTime.Now.ToString("yyMM"));
+            for (int i = 0; i <=9; i++)
+            {
+                string month= DateTime.Now.AddMonths(i).ToString("yyMM");
+                optionString += "IH" + month + ".CF,";
+            }
+            optionString += "510050.SH";
 
             bool bRet = SetConsoleCtrlHandler(commandLineDelegate, true);
 
@@ -106,16 +106,16 @@ namespace OrientWebGW.Client
                     data0.turnover = data["tt"];
                     data0.volume = data["deal"]["v"];
                     data0.count = data["deal"]["c"];
-                    if (optionData.ContainsKey(data0.code) == false)
-                    {
-                        List<optionDataFormat> myData0 = new List<optionDataFormat>();
-                        myData0.Add(data0);
-                        optionData.Add(data0.code, myData0);
-                    }
-                    else
-                    {
-                        optionData[data0.code].Add(data0);
-                    }
+                    //if (optionData.ContainsKey(data0.code) == false)
+                    //{
+                    //    List<optionDataFormat> myData0 = new List<optionDataFormat>();
+                    //    myData0.Add(data0);
+                    //    optionData.Add(data0.code, myData0);
+                    //}
+                    //else
+                    //{
+                    //    optionData[data0.code].Add(data0);
+                    //}
                     myData.Add(data0);
                     total += 1;
                 });
@@ -179,25 +179,20 @@ namespace OrientWebGW.Client
                     }
                 });
 
-
                 while (true)
                 {
                     Thread.Sleep(3 * 1000);
-                    int time = Convert.ToInt32(DateTime.Now.ToString("ddHHmm"));
+                    time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     Console.WriteLine(total);
-                    if ((time - lastRecordTime) >= 10)
+                    recordEnd = total - 1;
+                    if (recordEnd > recordStart)
                     {
-                        Console.WriteLine("record data!");
-                        StoreData store = new StoreData(myData);
-                        myData = new List<optionDataFormat>();
-                        lastRecordTime = time;
+                        StoreData store = new StoreData(myData, recordStart, recordEnd);
+                        Console.WriteLine("Time: {2}, record data! form {0} to {1}", recordStart, recordEnd, time);
                     }
-                    if (time % 100 >= 1600)
-                    {
-                        break;
-                    }
+                    recordStart = recordEnd + 1;
                 }
-            }
+              }
         }
 
 

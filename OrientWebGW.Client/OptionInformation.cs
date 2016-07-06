@@ -24,6 +24,7 @@ namespace OrientWebGW.Client
         /// </summary>
         public static SortedDictionary<int, optionFormat> myOptionList = new SortedDictionary<int, optionFormat>();
 
+
         /// <summary>
         /// 构造函数。按日期记录期权合约的基本信息。
         /// </summary>
@@ -165,7 +166,6 @@ namespace OrientWebGW.Client
             }
             w.stop();
         }
-
 
         /// <summary>
         /// 将获取的期权信息数据存入到数据库中。

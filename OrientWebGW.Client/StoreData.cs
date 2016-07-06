@@ -9,8 +9,17 @@ namespace OrientWebGW.Client
 {
     class StoreData
     {
-        public StoreData(List<optionDataFormat> myData)
+        public StoreData(List<optionDataFormat> myData,int start=0,int end=0)
         {
+            if (start==0)
+            {
+                start = 0;
+                end = myData.Count() - 1;
+            }
+            if (start!=0 && start<myData.Count() && end==0)
+            {
+                end = myData.Count() - 1;
+            }
             DataTable dt = new DataTable();
             dt.Columns.Add("代码", Type.GetType("System.String"));
             dt.Columns.Add("日期", Type.GetType("System.String"));
@@ -46,8 +55,9 @@ namespace OrientWebGW.Client
             string str = DateTime.Now.ToString("yyyyMMdd");
             lock(myData)
             {
-                foreach (var data in myData)
+                for (int i = start; i <=end; i++)
                 {
+                    optionDataFormat data = myData[i];
                     dt.Rows.Add(new object[] { data.code, str, data.time, data.last, data.ask[0], data.ask[1], data.ask[2], data.ask[3], data.ask[4], data.askv[0], data.askv[1], data.askv[2], data.askv[3], data.askv[4], data.bid[0], data.bid[1], data.bid[2], data.bid[3], data.bid[4], data.bidv[0], data.bidv[1], data.bidv[2], data.bidv[3], data.bidv[4], data.high, data.low, data.volume, data.turnover, data.openInterest, data.count, data.status });
                 }
             }
